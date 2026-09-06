@@ -1,0 +1,209 @@
+:root {
+    --primary-background-color: #0D0B12;
+    --secondary-background-color: #171320;
+
+    --primary-text-color: #F4F1EA;
+    --secondary-text-color: #C9FF5B;
+    --tertiary-text-color: #FF7A59;  
+}
+
+body {
+    background-color: var(--primary-background-color);
+    color: var(--primary-text-color);
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.movie-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1000px; /* Optional max width */
+    margin: 0 auto; /* Center the container */
+    padding: 20px;
+}
+
+.top-bar {
+    background-color: #14111C; 
+    width: 100%;
+}
+
+.watch-this{
+    color: var(--primary-text-color);
+}
+
+.today{
+    color: var(--secondary-text-color);
+}
+
+.now {
+    color: var(--tertiary-text-color);
+}
+
+.movie-details {
+    background-color: var(--secondary-background-color);
+    padding: 20px;
+
+    margin: 0px auto; /* Center the container with some margin */
+}
+
+.movie-info-container h2 {
+    font-size: 104px;
+    line-height: 0.86;
+    letter-spacing: -0.045em;
+    font-weight: 800;
+}
+
+.poster-details-container {
+    display: flex;
+    flex-direction: row;
+    column-gap: 20px; /* Stack poster and details vertically */
+}
+
+#moviePoster {
+    border-radius: 8px;
+    width: 300px; /* Makes the image responsive */
+    aspect-ratio: 2 / 3; /* Maintains a 2:3 aspect ratio */
+}
+
+
+
+/*.cast-list {
+    display: flex;
+    flex-direction: row;
+    column-gap: 10px;
+} */
+
+
+/* Slider Container */
+    .slider-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    /* The Unordered List (Track) */
+    .slider-track {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      gap: 10px;
+      list-style: none;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      border-radius: 12px;
+
+      
+      /* Hide standard scrollbars */
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE / Edge */
+    }
+
+    .slider-track::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
+    }
+
+    .cast-member {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 300px; /* Adjust as needed */
+        column-gap: 8px;
+    }
+
+    .cast-picture {
+        width: 50px;           /* Or any responsive size, like 100% or 15vw */
+        aspect-ratio: 1 / 1;    /* Forces the height to perfectly match the width */
+        border-radius: 999px;     /* Rounds the corners into a perfect circle */
+        object-fit: cover;      /* Prevents stretching if the original image isn't a square */
+    }
+
+    .cast-picture img {
+        width: 100%;           /* Or any responsive size, like 100% or 15vw */
+        aspect-ratio: 1 / 1;    /* Forces the height to perfectly match the width */
+        border-radius: 50%;     /* Rounds the corners into a perfect circle */
+        object-fit: cover;
+    }
+
+    .cast-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 100%; /* Takes up the remaining space */
+    }
+
+    .cast-name {
+        white-space: nowrap; /* Prevents text from wrapping to the next line */
+        width: auto; /* Ensures the text takes up the remaining space */
+        font-size: 0.9rem; /* Adjust as needed */
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .cast-character {
+        white-space: nowrap; /* Prevents text from wrapping to the next line */
+        width: auto; /* Ensures the text takes up the remaining space */
+        font-size: 0.7rem; /* Adjust as needed */
+        font-weight: normal;
+        margin: 0;
+    }
+
+    /* List Items (Slides) 
+    .slider-track li {
+      flex: 0 0 0%; /* Each slide takes full container width 
+      scroll-snap-align: center;
+      scroll-snap-stop: always;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 1rem;
+      font-weight: bold;
+      color: black;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      user-select: none;
+      background: green;
+    }
+
+    .slider-track img {
+      width: 92px;
+      height: 92px;
+      object-fit: cover;
+      border-radius: 999px;
+      margin-bottom: 4px;
+    } */
+
+    * Navigation Buttons */
+    .nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: green /*rgba(255, 255, 255, 0.85)*/;
+      border: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.25rem;
+      color: #1e293b;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, transform 0.1s;
+      z-index: 10;
+    }
+
+    .nav-btn:hover {
+      background: #ffffff;
+    }
+
+    .nav-btn:active {
+      transform: translateY(-50%) scale(0.95);
+    }
+
+    .prev-btn { left: 12px; }
+    .next-btn { right: 12px; }
