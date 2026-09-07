@@ -11,9 +11,10 @@
     </head>
     <body>
        
-
         <main>
             <div class="movie-container">
+
+               
 
                 <div class="top-bar">
                     <h1><span class="watch-this">Watch This</span> 
@@ -41,7 +42,11 @@
                             </div>
 
                             <div id="extra-details">
-
+                                <div class="director-container"></div>
+                                <div class="revenue-container"></div>
+                                <div class="budget-container"></div>
+                                <div class="original-langauge"></div>
+                                <div class="runtime"></div>
                             </div>
                         </div>
                     
@@ -73,117 +78,85 @@
                     </div>
                 </div>
 
+                <script>
+                    const date = new Date();
+                    let day = parseInt(String(date.getDate()).padStart(2, '0'));
+                    const year = date.getFullYear();
+                    const month = parseInt(String(date.getMonth() + 1).padStart(2, '0'));
+
+                    let fullNumber = year + month + day;
+                    let numberId = (fullNumber * 7919) % 900000;
+
+                    // Specify the API endpoint
+                    let apiUrl = `https://api.themoviedb.org/3/movie/200?api_key=a8a8dd219f02ae2d11809c43d9b85222&append_to_response=credits`;
+
+                    async function fetchMovieData() {
+                        try {
+                        const response = await fetch(apiUrl);
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return await response.json();
+                        } catch (err) {
+                        console.error('Fetch error:', err);
+                        }
+                    }
+
+                    fetchMovieData().then((movieData) => {
+                        if (!movieData) return;
+
+                        // Fill Title & Overview
+                        document.getElementById('titleElement').textContent = movieData.title || '';
+                        document.getElementById('overviewElement').textContent = movieData.overview || '';
+                        document.getElementById('movie-tag').textContent = movieData.tagline || '';
+
+                        // Poster
+                        const posterImg = document.getElementById('moviePoster');
+                        if (movieData.poster_path) {
+                        posterImg.src = `https://image.tmdb.org/t/p/w500${movieData.poster_path}`;
+                        }
+
+                        // Genres
+                        const genresContainer = document.getElementById('movieGenres');
+                        genresContainer.innerHTML = '';
+                        if (movieData.genres) {
+                        movieData.genres.forEach((genre) => {
+                            const genreItem = document.createElement('div');
+                            genreItem.classList.add('genre-item');
+                            genreItem.innerHTML = `<div class="genre-name">${genre.name}</div>`;
+                            genresContainer.appendChild(genreItem);
+                        });
+                        }
+
+                        // Cast List
+                        const castContainer = document.getElementById('castList');
+                        castContainer.innerHTML = '';
+
+                        if (movieData.credits && movieData.credits.cast) {
+                        movieData.credits.cast.forEach((castMember) => {
+                            const listItem = document.createElement('div');
+                            listItem.classList.add('cast-member');
+
+                            const profileImg = castMember.profile_path
+                            ? `https://image.tmdb.org/t/p/w92${castMember.profile_path}`
+                            : 'image-user.png';
+
+                            listItem.innerHTML = `
+                            <div class="cast-picture">
+                                <img src="${profileImg}" alt="${castMember.name}">
+                            </div>
+                            <div class="cast-info">
+                                <p class="cast-name">${castMember.name}</p> 
+                                <p class="cast-character">${castMember.character || ''}</p> 
+                            </div>
+                            `;
+                            castContainer.appendChild(listItem);
+                        });
+                        }
+                    });
+                    </script>
+
             
-
-            <script>
-                // Date and number generation
-                const date = new Date();
-                let day = parseInt(String(date.getDate()).padStart(2, '0'));
-                const year = date.getFullYear();
-                const month = parseInt(String(date.getMonth() + 1).padStart(2, '0')); // Months are zero-based
-   
-
-                let fullNumber = year+month+day;
-
-                let numberId = fullNumber * 7919 % 900000;
-
-                console.log('Current Date:', date);
-                console.log('Full Number:', fullNumber);
-                console.log('Number ID:', numberId);
-
-                // Specify the API endpoint
-                let apiUrl = `https://api.themoviedb.org/3/movie/280?api_key=a8a8dd219f02ae2d11809c43d9b85222&append_to_response=credits`;
-
-               
-                // Make a GET request with authentication using the Fetch API
-                async function fetchMovieData() {
-                    const response = await fetch(apiUrl);
-
-                    if (!response.ok) {
-                        console.error('Network response was not ok:', response.statusText);
-                        numberId = (numberId + 1) * 7919 % 900000;
-                        console.log('New Number ID:', numberId);
-                        //apiUrl = `https://api.themoviedb.org/3/movie/${numberId}&append_to_response=credits?api_key=a8a8dd219f02ae2d11809c43d9b85222`;
-                        apiUrl = `https://api.themoviedb.org/3/movie/280?api_key=a8a8dd219f02ae2d11809c43d9b85222&append_to_response=credits`
-                        return fetchMovieData();
-                        
-                    }
-
-                    return response.json();
-                }
-
-                fetchMovieData()
-                .then(movieData => {
-                    const movieTitle = movieData.title;
-                    const movieOverview = movieData.overview;
-                    const movieCast = movieData.credits.cast;
-                    const movieTag = movieData.tagline;
-                    const movieGenre = movieData.genres;
-
-                    const director = movieData.director;
-                    const revenue = movieData.revenue;
-                    const budget = movieData.budget;
-                    const language = movieData.original_language;
-                    const runtime = movieData.runtime;
-
-                    console.log(`${movieData.credits.cast}`);
-
-                    for (const castMember of movieCast) {
-                        console.log(`${castMember.name} as ${castMember.character}`);
-                    }
-
-                    for (const genre of movieGenre) {
-                        console.log(`Genre: ${genre.name}`);
-                    }
-
-                    document.getElementById('titleElement').textContent = movieTitle;
-                    document.getElementById('overviewElement').textContent = movieOverview;
-                    document.getElementById('moviePoster').src = `https://image.tmdb.org/t/p/w500${movieData.poster_path}`;
-                    document.getElementById('movie-tag').textContent = movieTag;
-
-                    // Create list foe genres
-                    movieGenres.innerHTML = '';
-                    for (const genre of movieGenre) {
-                        const genreItem = document.createElement('div');
-                        genreItem.classList.add('genre-item');
-                        
-                        genreItem.innerHTML =
-                        `
-                            <div class="genre-name">${genre.name}</div>
-                        `;
-                        movieGenres.appendChild(genreItem);
-                    }
-
-                    //document.createElement('ul');
-                    castList.innerHTML = '';
-
-                    for (const castMember of movieCast) {
-                        const listItem = document.createElement('div');
-                        listItem.classList.add('cast-member');
-
-                        listItem.innerHTML =
-                         `<div class="cast-picture">
-                            <img src="https://image.tmdb.org/t/p/w92${castMember.profile_path}" 
-                         alt="${castMember.name}">
-                         </div>
-                         <div class="cast-info">
-                            <p class="cast-name">${castMember.name}</p> 
-                            <p class="cast-character">${castMember.character}</p>                           
-                         </div>
-                         `;
-                        castList.appendChild(listItem);
-                    }
-
-                    //document.getElementById('castList').textContent = 
-                     //   movieCast.map(castMember => `${castMember.name} as ${castMember.character}`).join(', ');
-
-
-                    
-                })
-                .catch(error => {
-                    console.error('Could not fetch movie data:', error);
-                });
-            </script>
             </div>
         </main>
     </body>

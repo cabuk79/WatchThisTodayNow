@@ -1,3 +1,13 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+/* 1. Ensure all padding and borders are calculated INSIDE element widths */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 :root {
     --primary-background-color: #0D0B12;
     --secondary-background-color: #171320;
@@ -5,6 +15,8 @@
     --primary-text-color: #F4F1EA;
     --secondary-text-color: #C9FF5B;
     --tertiary-text-color: #FF7A59;  
+
+    --title-tags-font: 'Bricolage Grotesque'
 }
 
 body {
@@ -22,6 +34,7 @@ body {
     max-width: 1000px; /* Optional max width */
     margin: 0 auto; /* Center the container */
     padding: 20px;
+
 }
 
 .top-bar {
@@ -42,23 +55,37 @@ body {
 }
 
 .movie-details {
-    background-color: var(--secondary-background-color);
-    padding: 20px;
+    width: 100%;
+}
 
-    margin: 0px auto; /* Center the container with some margin */
+.movie-info-container {
+    display: flex;
+    flex-direction: column;
+    align-content: start;
+    min-width: 0; /* CRITICAL: Allows flex child to shrink properly */
+    flex: 1;
+    row-gap: 20px;
 }
 
 .movie-info-container h2 {
-    font-size: 104px;
-    line-height: 0.86;
+    font-size: clamp(2.5rem, 6vw, 6.5rem); /* Scales down on smaller displays */
+    line-height: 0.9;
     letter-spacing: -0.045em;
     font-weight: 800;
+    font-family: var(--title-tags-font);
+    overflow-wrap: break-word; /* Allows long single words to wrap if needed */
 }
 
 .poster-details-container {
     display: flex;
     flex-direction: row;
-    column-gap: 20px; /* Stack poster and details vertically */
+    column-gap: 20px;
+    width: 100%;
+    min-width: 0; /* Prevents overflow blowout */
+}
+
+.movie-poster-container {
+    flex-shrink: 0;
 }
 
 #moviePoster {
@@ -67,7 +94,17 @@ body {
     aspect-ratio: 2 / 3; /* Maintains a 2:3 aspect ratio */
 }
 
+#movieGenres {
+    display: flex;
+    flex-direction: row;
+    column-gap: 10px;
+}
 
+.genre-name {
+    border: 1px solid red;
+    padding: 8px;
+    border-radius: 40px;
+}
 
 /*.cast-list {
     display: flex;
@@ -75,30 +112,45 @@ body {
     column-gap: 10px;
 } */
 
+.movie-details {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--secondary-background-color);
+    padding: 20px;
+    margin: 0px auto; /* Center the container with some margin */
+    min-width: 0;
+    max-width: 100%;
+}
 
 /* Slider Container */
     .slider-wrapper {
       position: relative;
       width: 100%;
-      max-width: 600px;
+      overflow: hidden;
+      margin-top: 24px; /* Space between details and cast */
+      box-sizing: border-box;
+      padding: 0 54px; /* Creates clearance on both sides for the 44px buttons */
+      /*min-width: 0;
+      max-width: 100%;*/
     }
 
     /* The Unordered List (Track) */
     .slider-track {
       display: flex;
       flex-direction: row;
-      flex-wrap: nowrap;
-      justify-content: flex-start;
+      flex-wrap: nowrap;    
       gap: 10px;
       list-style: none;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
       scroll-behavior: smooth;
       border-radius: 12px;
+      width: 100%;
+      white-space: nowrap; /* Keeps items on one line */
+      justify-content: flex-start;
 
-      
       /* Hide standard scrollbars */
-      scrollbar-width: none; /* Firefox */
+      scrollbar-width: nowrap; /* Firefox */
       -ms-overflow-style: none; /* IE / Edge */
     }
 
@@ -110,12 +162,20 @@ body {
         display: flex;
         flex-direction: row;
         align-items: center;
-        width: 300px; /* Adjust as needed */
+        flex: 0 0 220px; /* Don't shrink; keep fixed card width */
         column-gap: 8px;
-    }
+        }
+    /*
+    .cast-member {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 300px; /* Adjust as needed 
+        column-gap: 8px;
+    } */
 
     .cast-picture {
-        width: 50px;           /* Or any responsive size, like 100% or 15vw */
+        max-width: 50px;           /* Or any responsive size, like 100% or 15vw */
         aspect-ratio: 1 / 1;    /* Forces the height to perfectly match the width */
         border-radius: 999px;     /* Rounds the corners into a perfect circle */
         object-fit: cover;      /* Prevents stretching if the original image isn't a square */
@@ -176,7 +236,7 @@ body {
       margin-bottom: 4px;
     } */
 
-    * Navigation Buttons */
+    /* Navigation Buttons */
     .nav-btn {
       position: absolute;
       top: 50%;
@@ -205,5 +265,5 @@ body {
       transform: translateY(-50%) scale(0.95);
     }
 
-    .prev-btn { left: 12px; }
-    .next-btn { right: 12px; }
+    .prev-btn { left: 0px; }
+    .next-btn { right: 0px; }
